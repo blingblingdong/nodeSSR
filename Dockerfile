@@ -1,5 +1,5 @@
 # 第一階段：建立與編譯環境
-FROM node:16 AS builder
+FROM node:18 AS builder
 
 # 設定工作目錄
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 # 例如：RUN npm run build
 
 # 第二階段：精簡運行環境
-FROM node:16-slim
+FROM node:18-slim
 
 WORKDIR /app
 
