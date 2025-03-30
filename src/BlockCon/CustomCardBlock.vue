@@ -2,7 +2,8 @@
   <div :class="block.attributes?.class" v-if="print_law">
     <div class="law-block-content-multiple">
       <p class="law-block-chapter-num">
-        <span class="law-block-chapter">{{ block.data.chapter }}</span>第<span class="law-block-num">185</span>條
+        <span class="law-block-chapter">{{ block.data.chapter }}</span>第<span
+          class="law-block-num">{{ block.data.num }}</span>條
         <i class="fas fa-caret-up" v-show="showLines" @click="showLines = false"></i>
         <i class="fas fa-caret-down" v-show="!showLines" @click="showLines = true"></i>
       </p>
@@ -21,7 +22,7 @@ import { defineProps, ref, onMounted } from 'vue'
 import type { Law } from '..//types/Law'
 import { loadLaw } from '../types/Law'
 import type { Attributes, InlineNode, Block, Note } from '../types/Note'
-const ApiLink = "http://localhost:8080"
+const ApiLink = "https://deploylawweb-production.up.railway.app"
 
 const showLines = ref(true);
 
