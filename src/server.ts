@@ -2,6 +2,9 @@
 import express, { Request, Response } from 'express'
 import { createServer as createViteServer } from 'vite'
 import path from 'path'
+import { createSSRApp } from 'vue'
+import { renderToString } from '@vue/server-renderer'
+import LawContent from './LawContent.vue'
 
 async function startServer() {
   const app = express()
@@ -26,6 +29,24 @@ async function startServer() {
       res.status(200).send(html)
     } catch (error: any) {
       res.status(500).send(error.message)
+    }
+  })
+
+  app.get('/render-law/:chapter/:num', async (req: Request, res: Response) => {
+    const { chapter, num } = req.params
+    try {
+      // 建立 SSR Vue 應用，並將 chapter 與 num 作為 props 傳入 LawContent
+      const vueApp = createSSRApp({
+        data: () => ({ chapter, num }),
+        // 使用 LawContent 組件並傳入 props
+        template: `<LawContent :chapter="chapter" :num="num" />`,
+        components: { LawContent }
+      })
+      const html = await renderToString(vueApp)
+      res.send(html)
+    } catch (err: any) {
+      console.error('SSR render error:', err)
+      res.status(500).send(err.toString())
     }
   })
 
