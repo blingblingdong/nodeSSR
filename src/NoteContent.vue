@@ -13,7 +13,7 @@ import BlockQuoteBlock from './BlockCon/BlockQuoteBlock.vue'
 import H2Block from './BlockCon/H2Block.vue'
 import H3Block from './BlockCon/H3Block.vue'
 import FigureBlock from './BlockCon/FigureBlock.vue'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, onMounted } from 'vue'
 
 // 假設 theNote 是以 prop 傳入
 
@@ -25,6 +25,10 @@ const componentMap: Record<string, any> = {
   h3: H3Block,
   figure: FigureBlock,
 }
+
+
+
+
 
 const getComponent = (type: string) => {
   return componentMap[type] || ParagraphBlock

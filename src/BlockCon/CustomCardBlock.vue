@@ -2,8 +2,8 @@
   <div :class="block.attributes?.class" v-if="print_law">
     <div class="law-block-content-multiple">
       <p class="law-block-chapter-num">
-        <span class="law-block-chapter">{{ block.data.chapter }}</span>第<span
-          class="law-block-num">{{ block.data.num }}</span>條
+        <span class="law-block-chapter">{{ block.data.chapter }}</span>第<span class="law-block-num">{{ block.data.num
+        }}</span>條
         <i class="fas fa-caret-up" v-show="showLines" @click="showLines = false"></i>
         <i class="fas fa-caret-down" v-show="!showLines" @click="showLines = true"></i>
       </p>
@@ -32,18 +32,16 @@ const props = defineProps<{
 }>()
 const print_law = ref<Law | null>(null);
 
-onMounted(async () => {
-  if (props.block.data) {
-    let law = await loadLaw(props.block.data.chapter, props.block.data.num, ApiLink);
-    if (law != null) {
-      print_law.value = law;
-    }
-
+// 使用 async setup 在 SSR 階段載入資料
+if (props.block.data) {
+  try {
+    // 注意：這裡必須確保 loadLaw 能在 SSR 環境中運行（例如不依賴瀏覽器 API）
+    print_law.value = await loadLaw(props.block.data.chapter, props.block.data.num, "https://deploylawweb-production.up.railway.app")
+    console.log('Law loaded in setup:', print_law.value)
+  } catch (error) {
+    console.error('Error loading law in setup:', error)
   }
-
-})
-
-
+}
 
 
 </script>

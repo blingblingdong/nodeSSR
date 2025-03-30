@@ -17,7 +17,6 @@ async function startServer() {
   app.post('/render-note', async (req: Request, res: Response) => {
     try {
       const note = req.body  // 假設 JSON 本身就是 note 物件
-      console.log('Received note:', note)
       if (!note) {
         return res.status(400).send("Missing note data")
       }
