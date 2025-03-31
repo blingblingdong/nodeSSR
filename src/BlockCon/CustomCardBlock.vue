@@ -1,16 +1,23 @@
 <template>
-  <div :class="block.attributes?.class" v-if="print_law">
+  <div class="law-block" v-if="card">
     <div class="law-block-content-multiple">
       <p class="law-block-chapter-num">
-        <span class="law-block-chapter">{{ block.data.chapter }}</span>第<span class="law-block-num">{{ block.data.num
-        }}</span>條
+        <span class="law-block-chapter">{{ card.chapter }}</span>第<span class="law-block-num">{{ card.num }}</span>條
         <i class="fas fa-caret-up" v-show="showLines" @click="showLines = false"></i>
         <i class="fas fa-caret-down" v-show="!showLines" @click="showLines = true"></i>
       </p>
       <ul class='law-block-lines' v-show="showLines">
-        <template v-for="line in print_law.lines">
-          <div v-if="line.startsWith(' ')" class="law-indent">{{ line }}</div>
-          <li v-else class="law-block-line">{{ line }}</li>
+        <template v-for="line in card.lines">
+          <div v-if="line.line_type === 'indent'" :class="line.attributes?.class" :style="line.attributes?.style">
+            <template v-if="line.children" v-for="child in line.children">
+              <InlineNodeTemplate :inline-node="child" />
+            </template>
+          </div>
+          <li v-else class="law-block-line" :class="line.attributes?.class" :style="line.attributes?.style">
+            <template v-if="line.children" v-for="child in line.children">
+              <InlineNodeTemplate :inline-node="child" />
+            </template>
+          </li>
         </template>
       </ul>
     </div>
@@ -19,28 +26,20 @@
 
 <script lang="ts" setup>
 import { defineProps, ref, onMounted } from 'vue'
-import type { Law } from '..//types/Law'
-import { loadLaw } from '../types/Law'
-import type { Attributes, InlineNode, Block, Note } from '../types/Note'
-const ApiLink = "https://deploylawweb-production.up.railway.app"
+import type { Attributes, InlineNode, Block, Note, Line, LawCard } from '../../types/Note'
+import InlineNodeTemplate from './InlineNodeTemplate.vue'
+
 
 const showLines = ref(true);
-
+const card = ref<LawCard>();
 
 const props = defineProps<{
   block: Block
 }>()
-const print_law = ref<Law | null>(null);
 
-// 使用 async setup 在 SSR 階段載入資料
+
 if (props.block.data) {
-  try {
-    // 注意：這裡必須確保 loadLaw 能在 SSR 環境中運行（例如不依賴瀏覽器 API）
-    print_law.value = await loadLaw(props.block.data.chapter, props.block.data.num, "https://deploylawweb-production.up.railway.app")
-    console.log('Law loaded in setup:', print_law.value)
-  } catch (error) {
-    console.error('Error loading law in setup:', error)
-  }
+  card.value = props.block.data;
 }
 
 
