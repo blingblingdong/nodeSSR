@@ -9,7 +9,7 @@
       </p>
       <ul class="law-block-lines" v-show="showLines">
         <template v-for="line in print_law.lines" :key="line">
-          <div v-if="line.startsWith(' ')" class="law-indent">{{ line }}</div>
+          <p v-if="line.startsWith(' ')" class="law-indent">{{ line }}</p>
           <li v-else class="law-block-line">{{ line }}</li>
         </template>
       </ul>
