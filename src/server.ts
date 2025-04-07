@@ -5,9 +5,13 @@ import path from 'path'
 import { createSSRApp } from 'vue'
 import { renderToString } from '@vue/server-renderer'
 import LawContent from './LawContent.vue'
+import cors from 'cors' // 直接使用 import 方式
 
 async function startServer() {
   const app = express()
+  app.use(cors({
+    origin: '*'
+  }));
   app.use(express.json({ limit: '50mb' }))
 
   // 建立 Vite 開發服務器（中介模式）
