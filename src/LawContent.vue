@@ -1,6 +1,6 @@
 <!-- LawContent.vue -->
 <template>
-  <div v-if="print_law">
+  <div class='law-block'>
     <div class="law-block-content-multiple">
       <p class="law-block-chapter-num">
         <span class="law-block-chapter">{{ chapter }}</span>第<span class="law-block-num">{{ num }}</span>條
