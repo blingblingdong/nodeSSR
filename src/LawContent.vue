@@ -4,22 +4,22 @@
     <div class="law-block-content-multiple">
       <p class="law-block-chapter-num">
         <span class="law-block-chapter">{{ chapter }}</span>第<span class="law-block-num">{{ num }}</span>條
-        <i class="fas fa-caret-up" v-show="showLines" @click="showLines = false"></i>
-        <i class="fas fa-caret-down" v-show="!showLines" @click="showLines = true"></i>
       </p>
-      <ul class="law-block-lines" v-show="showLines">
-        <template v-for="line in print_law.lines" :key="line">
-          <li v-if="line.startsWith(' ')" class="law-indent">{{ line }}</li>
-          <li v-else class="law-block-line">{{ line }}</li>
-        </template>
-      </ul>
+      <div v-for="line in print_law.lines" class="law-block-lines">
+        <div v-if="line.line_type === 'indent'" class="law-indent">
+          {{ line.content }}
+        </div>
+        <div v-else class="law-block-line">
+          {{ line.content }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { defineProps, ref } from 'vue'
-import type { Law } from './types/Law'
+import type { Law, Line } from './types/Law'
 import { loadLaw } from './types/Law'
 
 // 從 props 取得 chapter 與 num（注意：傳入的值都是字串）
