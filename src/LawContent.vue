@@ -5,13 +5,11 @@
       <p class="law-block-chapter-num">
         <span class="law-block-chapter">{{ chapter }}</span>第<span class="law-block-num">{{ num }}</span>條
       </p>
-      <div v-for="line in print_law.lines" class="law-block-lines">
-        <div v-if="line.line_type === 'indent'" class="law-indent">
-          {{ line.content }}
-        </div>
-        <div v-else class="law-block-line">
-          {{ line.content }}
-        </div>
+      <div class='law-block-lines'>
+        <template v-for="line in print_law.lines" v-if="text === ''">
+          <div v-if="line.line_type === 'indent'" class="law-indent">{{ line.content }}</div>
+          <div v-else class="law-block-line">{{ line.content }}</div>
+        </template>
       </div>
     </div>
   </div>
